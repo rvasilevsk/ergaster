@@ -37,13 +37,13 @@ Alternatively, you can install the module from the source distribution. The step
  2. Download the module tarball using `wget` utility:
 
     ```
-    $ wget -O generatepass.tar.gz https://github.com/rvasilevsk/ergaster/tarball/master
+    $ wget -O ergaster.tar.gz https://github.com/rvasilevsk/ergaster/tarball/master
     ```
 
     Alternatively, you can use the `curl` tool to download the module tarball:
 
     ```
-    $ curl -L -o generatepass.tar.gz https://github.com/rvasilevsk/ergaster/tarball/master
+    $ curl -L -o ergaster.tar.gz https://github.com/rvasilevsk/ergaster/tarball/master
     ```
 
  3. Extract the tarball and install the module:
