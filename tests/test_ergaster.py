@@ -1,14 +1,11 @@
-import sys
-
-sys.path.insert(0, "src")
-
 import pytest
 
-from ergaster.ergaster import add
+from ergaster import add
 
 data = (
     (1, 2, 3),
     (2, 2, 4),
+    (3, 2, 5),
 )
 
 

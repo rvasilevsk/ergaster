@@ -1,6 +1,7 @@
 TEST_PATH=./
 PKG_SRC=./src/ergaster
 #PYTHON_PATH=./src/
+PY_FILES=setup.py ./ergaster ./tests
 
 all: docs tests dist
 
@@ -24,8 +25,11 @@ _requirements-test.txt.pyc: requirements-test.txt
 	echo > _requirements-test.txt.pyc
 
 whl-test:
-	pip install -U dist/ergaster-0.0.1-py3-none-any.whl
-	python -c "from ergaster.ergaster import main; main()"
+	pip uninstall -y ergaster
+	pip install -U dist/ergaster-0.0.2-py3-none-any.whl
+	pip show -f ergaster
+	python -c "from ergaster import main; main()"
+	erg
 	pip uninstall -y ergaster
 
 docs:
@@ -36,43 +40,47 @@ live:
 	# TODO ModuleNotFoundError: spec not found for the module 'ergaster'
 	pdoc3 --http : ergaster bench
 
-build:
+build: clean-build
 	python -m pip install --upgrade build
 	python -m build
 	echo > _build.pyc
 
+upload:
+	python -m twine upload --repository testpypi dist/*
+	echo to install: python -m pip install --index-url https://test.pypi.org/simple/ ergaster
+
 clean: clean-pyc clean-build clean-docs
 
 clean-pyc:
-	rm -r *.pyc  *.pyo
+	rm -rf *.pyc *.pyo ergaster/__pycache__ tests/__pycache__
 
 clean-build:
-	rm -r build dist *.egg-info
+	rm -rf build dist *.egg-info
 
 clean-docs:
-	rm -r docs
+	rm -rf docs
 
 lint:
 	flake8 --exclude=venv,.tox,.git,__pycache__,docs,old,build,dist
 
 black:
-	black --check --diff ./src/ergaster ./tests
+	black --check --diff $(PY_FILES)
 
 black-fix: _black-fix.pyc
 
-_black-fix.pyc: src/ergaster tests
-	black ./src/ergaster ./tests
+_black-fix.pyc: ergaster tests
+	black $(PY_FILES)
 	echo > _black-fix.pyc
 
 isort:
-	isort --check-only --diff ./src/ergaster ./tests
+	isort --check-only --diff $(PY_FILES)
 
 isort-fix:
-	isort ./src/ergaster ./tests
+	isort $(PY_FILES)
 
 fix: isort-fix black-fix
 
 pytest:
 	pytest --verbose --color=yes
 
-.PHONY: tests docs build
+#.PHONY: tests docs build
