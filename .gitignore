@@ -1,3 +1,13 @@
+mdb-src
+docs
+src/*.egginfo
+
+# PyCharm
+.idea
+
+# other
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

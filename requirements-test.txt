@@ -1,0 +1,8 @@
+pdoc3
+flake8
+isort
+black
+pytest
+pytest-cov
+tox
+#pylama
