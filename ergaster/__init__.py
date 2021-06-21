@@ -1,7 +1,7 @@
 from ergaster.version import __version__
 
 __title__ = "ergaster"
-__author__ = "Roman Vasilevskiy"
+__author__ = "Roman Vasilevsky"
 __license__ = "MIT"
 
 

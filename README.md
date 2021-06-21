@@ -79,4 +79,4 @@ Licensed under the [MIT License]().
 
 ## Author
 
-Roman Vasilevskiy (roman.vasilevsk@example.com) (gmail)
+Roman Vasilevsky (roman.vasilevsk@example.com) (gmail)

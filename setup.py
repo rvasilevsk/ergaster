@@ -51,7 +51,7 @@ classifiers = [
 setup(
     name="ergaster",
     version=get_version(),
-    author="Roman Vasilevskiy",
+    author="Roman Vasilevsky",
     author_email="roman.vasilevsk@gmail.com",
     url="https://github.com/rvasilevsk/ergaster",
     license="MIT",
