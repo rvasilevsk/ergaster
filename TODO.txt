@@ -1,0 +1,2 @@
+isort n black conflict
+venv activate in make
