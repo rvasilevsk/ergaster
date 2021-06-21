@@ -61,7 +61,7 @@ setup(
     platforms=["any"],
     python_requires=">=3.6",
     install_requires=[
-        "pyclip",
+        "pyperclip",
     ],
     packages=find_packages(),
     entry_points={

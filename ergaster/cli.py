@@ -1,4 +1,4 @@
-from pyclip import paste
+from pyperclip import paste
 
 
 def erg():

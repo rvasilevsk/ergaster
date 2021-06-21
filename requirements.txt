@@ -1,2 +1,2 @@
-pyclip
+pyperclip
 -r requirements-test.txt
