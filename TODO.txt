@@ -1,2 +1,4 @@
+mypy tox
+pytest init script
 isort n black conflict
 venv activate in make

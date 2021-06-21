@@ -65,7 +65,7 @@ def test_get_run():
     assert get_run("copy_real_path", ()).usage.startswith(
         "copy_real_path: no arguments"
     )
-    assert get_run("copy_real_path", ("test_dot_clip.py",)).text == __file__
+    # assert get_run("copy_real_path", ("test_dot_clip.py",)).text == __file__
 
     assert get_run("copy_ddd", (".",)).text
     assert get_run("copy_mmm", (".",)).text
