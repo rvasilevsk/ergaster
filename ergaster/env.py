@@ -7,6 +7,9 @@ import pyperclip
 
 
 ###################################################################################################################
+from ergaster.dot_clip import shorten_to_line
+
+
 class DictOverride:
     """
     >>> fns = dict(is_windows=_is_windows, now=datetime.datetime.now, cwd=os.getcwd)
@@ -72,11 +75,6 @@ class DictOverride:
 
 
 #######################################################################################################################
-def str_println(s, *args):
-    line = " ".join(map(str, args))
-    return s + line + "\n"
-
-
 def _is_windows():
     return os.name == "nt"
 
@@ -89,11 +87,99 @@ def _get_stderr():
     return sys.stderr
 
 
+def get_default_clip():
+    return ClipPyperclip()
+
+
 def is_file_obj(x):
-    return hasattr(x, 'id')
+    return hasattr(x, "id")
+
+
+def str_println(*args: Any) -> str:
+    r"""
+    >>> str_println(1, 2, 3)
+    '1 2 3\n'
+    """
+    return " ".join(map(str, args)) + "\n"
+
+
+def file_println(file_obj, *args: Any):
+    sep = ""
+    for x in args:
+        file_obj.write(sep)
+        file_obj.write(str(x))
+        sep = " "
+    file_obj.write("\n")
+
+
+class StrFile:
+    def __init__(self):
+        self.buf = ""
+
+    def write(self, s: str):
+        self.buf += s
+
+
+class ClipPyperclip:
+    # @staticmethod
+    def copy_bytes(bts: bytes) -> None:
+        pyperclip.copy(bts)
+
+    # @staticmethod
+    def paste_bytes() -> bytes:
+        return pyperclip.paste()
+
+
+class ClipMonk:
+    def __init__(self):
+        self.buf = b""
+
+    def copy_bytes(self, bts: bytes) -> None:
+        self.buf = bts
+
+    def paste_bytes(self) -> bytes:
+        return self.buf
 
 
 class Env:
+    r"""
+    >>> env = Env(is_windows=False, cwd='/root', now=datetime.datetime(2021, 6, 1))
+    >>> env.overrides_as_dict() == {'is_windows': False, 'cwd': '/root', 'now': datetime.datetime(2021, 6, 1, 0, 0)}
+    True
+    >>> env.is_windows()
+    False
+    >>> env.cwd()
+    '/root'
+    >>> env.now()
+    datetime.datetime(2021, 6, 1, 0, 0)
+    >>> env.println(1, 2, 3)
+    1 2 3
+    >>> out = StrFile()
+    >>> env.set_stdout(out)
+    >>> env.println(4, 5, 6)
+    >>> out.buf
+    '4 5 6\n'
+    >>> err = StrFile()
+    >>> env.set_stderr(err)
+    >>> env.eprintln("error", "message")
+    >>> err.buf
+    'error message\n'
+    >>> out = StrFile()
+    >>> env.set_stdout(out)
+    >>> env.set_stderr(out)
+    >>> env.println("std", "message")
+    >>> env.eprintln("error", "message")
+    >>> out.buf
+    'std message\nerror message\n'
+    >>> clip = ClipMonk
+    >>> env = Env(clip=clip)
+    >>> env.clip_copy('text to clip')
+    """
+
+    # env.is_windows() == False
+    # Falsee
+    # env.cwd()
+    # Falsee
     def __init__(self, **kwargs):
         fns = dict(
             is_windows=_is_windows,
@@ -101,26 +187,25 @@ class Env:
             cwd=os.getcwd,
             stdout=_get_stdout,
             stderr=_get_stderr,
+            # clip=ClipPyperclip,
+            clip=get_default_clip,
         )
         self.overrides = DictOverride(fns, kwargs)
-        self.stdout_buf = ""
-        self.stderr_buf = ""
 
     ###################################################################################################################
     def println(self, *args):
-        s = str_println(*args)
-        self.stdout_buf += s
+        file_println(self.stdout(), *args)
 
     def eprintln(self, *args):
-        s = str_println(*args)
-        self.stderr_buf += s
+        file_println(self.stderr(), *args)
 
     def clip_copy(self, s):
-        self.println("clipboard <<<", s)
-        pyperclip.copy(s)
+        self.println("clipboard <<<", shorten_to_line(s))
+        bts = bytes(s, 'utf8')
+        self.clip().copy_bytes(bts)
 
     def clip_paste(self, s):
-        return pyperclip.paste()
+        return self.clip().paste_bytes()
 
     ###################################################################################################################
     # def __getitem__(self, key: str) -> Any:
@@ -151,6 +236,12 @@ class Env:
 
     def set_stderr(self, val):
         self.overrides["stderr"] = val
+
+    def clip(self):
+        return self.overrides["clip"]
+
+    def set_clip(self, val):
+        self.overrides["clip"] = val
 
     ###################################################################################################################
     def is_windows(self):
@@ -212,5 +303,5 @@ def env_doctests():
 
 ###################################################################################################################
 if __name__ == "__main__":
-    _main()
+    # _main()
     env_doctests()
