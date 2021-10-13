@@ -2,6 +2,7 @@ import pytest
 
 from ergaster.dot_clip import first_line_n_count, get_run, shorten_to_line
 
+#######################################################################################################################
 data = (
     ("", "", 0),
     ("aaa", "aaa", 1),
@@ -26,6 +27,7 @@ def test_shorten_to_line(text, result):
     assert shorten_to_line(text) == result
 
 
+#######################################################################################################################
 win_files = """
 dot_clip/dot_clip_nt.py
 dot_clip/text_ellipsis.py
@@ -65,15 +67,23 @@ def test_get_run():
     assert get_run("copy_real_path", ()).usage.startswith(
         "copy_real_path: no arguments"
     )
-    assert get_run("copy_real_path", ("test_dot_clip.py",)).text == __file__
+
+    text = get_run("copy_real_path", ("test_dot_clip.py",)).text
+    # text = os.path.normpath(text)
+    # file_text = os.path.normpath(__file__)
+    # log(text)
+    # log(file_text)
+    # assert text == file_text
+    assert text.endswith("test_dot_clip.py")
 
     assert get_run("copy_ddd", (".",)).text
     assert get_run("copy_mmm", (".",)).text
 
+    assert get_run("qwerty_clip", ()).__class__.__name__ == "RunQwertyClip"
+
     assert get_run("unknown_cmd", (".",)).usage.startswith(
         "Unknown command unknown_cmd"
     )
-
 
 # def test_windows_install():
 #     root = 'c:/bin/bin_python'

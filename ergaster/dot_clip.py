@@ -6,6 +6,7 @@ import pyperclip
 
 from ergaster.file_writer import FileWriterFs, file_read_utf8
 from ergaster.text_ellipsis import ellipsis_line
+from ergaster.text_utils import str_qwerty_en_ru
 
 
 #######################################################################################################################
@@ -82,7 +83,7 @@ def auto_slashes(path):
 #######################################################################################################################
 def name_content_py():
     self_root = os.path.dirname(__file__)
-    py_files = "dot_clip.py text_ellipsis.py file_writer.py pyperclip/__init__.py pyperclip/__main__.py".split()
+    py_files = "dot_clip.py text_ellipsis.py text_utils.py file_writer.py pyperclip/__init__.py pyperclip/__main__.py".split()
     for filename in py_files:
         src = os.path.join(self_root, filename)
         dst = os.path.join("dot_clip", filename)
@@ -100,6 +101,7 @@ def alias_cmd_seq():
         ("crp", "copy_real_path"),
         ("cddd", "copy_ddd"),
         ("cmmm", "copy_mmm"),
+        ("qwe", "qwerty_clip"),
     )
 
 
@@ -242,6 +244,16 @@ class RunCopyStdin:
         RunCopy(text).run()
 
 
+class RunQwertyClip:
+    def __init__(self):
+        pass
+
+    def run(self):
+        text = pyperclip.paste()
+        text = str_qwerty_en_ru(text)
+        RunCopy(text).run()
+
+
 #######################################################################################################################
 def get_run(inner_cmd, args):
     if not inner_cmd:
@@ -277,6 +289,8 @@ def get_run(inner_cmd, args):
         return RunCopy(ddd())
     if inner_cmd == "copy_mmm":
         return RunCopy(mmm())
+    if inner_cmd == "qwerty_clip":
+        return RunQwertyClip()
     usage = "Unknown command %s" % inner_cmd
     return RunUsage(usage)
 
@@ -310,3 +324,5 @@ if __name__ == "__main__":
     # do_run('copy_real_path', ('.'))
     # do_run('copy_ddd', ())
     # do_run('copy_mmm', ())
+
+    # do_run('qwerty_clip', ())

@@ -1,0 +1,8 @@
+dot_clip=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" $*
+cv=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" paste $*
+cc=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" copy_args $*
+ccstdin=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" copy_stdin $*
+ccd=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" copy_cd $*
+crp=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" copy_real_path $*
+cddd=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" copy_ddd $*
+cmmm=python3 "c:\bin\bin_python\dot_clip\dot_clip.py" copy_mmm $*

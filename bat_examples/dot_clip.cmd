@@ -1,0 +1,1 @@
+@python3 c:\bin\bin_python\dot_clip\dot_clip.py %*

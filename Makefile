@@ -99,7 +99,7 @@ isort-fix:
 .PHONY: fix
 fix: isort-fix black-fix
 
-.PHONY: pytest
-pytest:
-	PYTHONPATH=.
-	pytest --verbose --color=yes
+#.PHONY: pytest
+#pytest:
+#	PYTHONPATH=.
+#	pytest --verbose --color=yes
